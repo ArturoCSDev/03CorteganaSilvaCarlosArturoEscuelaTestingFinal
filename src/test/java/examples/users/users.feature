@@ -7,20 +7,16 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Crear un usuario exitosamente
+    * def id = 100
+    * def username = 'arturodev'
+    * def firstName = 'Arturo'
+    * def lastName = 'Dev'
+    * def email = 'arturo@testing.com'
+    * def password = 'password123'
+    * def phone = '123456789'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 100,
-        "username": "arturodev",
-        "firstName": "Arturo",
-        "lastName": "Dev",
-        "email": "arturo@testing.com",
-        "password": "password123",
-        "phone": "123456789",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
     And match response.message != null
@@ -89,20 +85,16 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Obtener un usuario por username
+    * def id = 103
+    * def username = 'testuser_get'
+    * def firstName = 'Test'
+    * def lastName = 'User'
+    * def email = 'testget@test.com'
+    * def password = 'pass789'
+    * def phone = '333333333'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 103,
-        "username": "testuser_get",
-        "firstName": "Test",
-        "lastName": "User",
-        "email": "testget@test.com",
-        "password": "pass789",
-        "phone": "333333333",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
 
@@ -122,37 +114,26 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Actualizar un usuario exitosamente
+    * def id = 104
+    * def username = 'testuser_update'
+    * def firstName = 'Antes'
+    * def lastName = 'Update'
+    * def email = 'antes@test.com'
+    * def password = 'pass000'
+    * def phone = '444444444'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 104,
-        "username": "testuser_update",
-        "firstName": "Antes",
-        "lastName": "Update",
-        "email": "antes@test.com",
-        "password": "pass000",
-        "phone": "444444444",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
 
+    * def firstName = 'Despues'
+    * def lastName = 'Actualizado'
+    * def email = 'despues@test.com'
+    * def password = 'newpass123'
+    * def phone = '555555555'
     Given path '/user/testuser_update'
-    And request
-      """
-      {
-        "id": 104,
-        "username": "testuser_update",
-        "firstName": "Despues",
-        "lastName": "Actualizado",
-        "email": "despues@test.com",
-        "password": "newpass123",
-        "phone": "555555555",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method put
     Then status 200
 
@@ -165,20 +146,16 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Eliminar un usuario exitosamente
+    * def id = 105
+    * def username = 'testuser_delete'
+    * def firstName = 'Delete'
+    * def lastName = 'Me'
+    * def email = 'delete@test.com'
+    * def password = 'pass111'
+    * def phone = '666666666'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 105,
-        "username": "testuser_delete",
-        "firstName": "Delete",
-        "lastName": "Me",
-        "email": "delete@test.com",
-        "password": "pass111",
-        "phone": "666666666",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
 
@@ -194,20 +171,16 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Login de usuario exitoso
+    * def id = 106
+    * def username = 'loginuser'
+    * def firstName = 'Login'
+    * def lastName = 'Test'
+    * def email = 'login@test.com'
+    * def password = 'loginpass'
+    * def phone = '777777777'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 106,
-        "username": "loginuser",
-        "firstName": "Login",
-        "lastName": "Test",
-        "email": "login@test.com",
-        "password": "loginpass",
-        "phone": "777777777",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
 
@@ -233,20 +206,16 @@ Feature: Petstore - User API Tests
 
   @happypath
   Scenario: Verificar que un usuario eliminado ya no existe
+    * def id = 120
+    * def username = 'user_eliminar_verificar'
+    * def firstName = 'Temporal'
+    * def lastName = 'User'
+    * def email = 'temporal@test.com'
+    * def password = 'temppass'
+    * def phone = '101010101'
+    * def userStatus = 1
     Given path '/user'
-    And request
-      """
-      {
-        "id": 120,
-        "username": "user_eliminar_verificar",
-        "firstName": "Temporal",
-        "lastName": "User",
-        "email": "temporal@test.com",
-        "password": "temppass",
-        "phone": "101010101",
-        "userStatus": 1
-      }
-      """
+    And request read('data/user.json')
     When method post
     Then status 200
 

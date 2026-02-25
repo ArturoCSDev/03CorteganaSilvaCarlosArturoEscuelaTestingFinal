@@ -7,18 +7,14 @@ Feature: Petstore - Store API Tests
 
   @happypath
   Scenario: Crear una orden exitosamente
+    * def id = 10
+    * def petId = 1
+    * def quantity = 2
+    * def shipDate = '2026-02-23T00:00:00.000+0000'
+    * def status = 'placed'
+    * def complete = true
     Given path '/store/order'
-    And request
-      """
-      {
-        "id": 10,
-        "petId": 1,
-        "quantity": 2,
-        "shipDate": "2026-02-23T00:00:00.000+0000",
-        "status": "placed",
-        "complete": true
-      }
-      """
+    And request read('data/order.json')
     When method post
     Then status 200
     And match response.id == 10
@@ -29,18 +25,14 @@ Feature: Petstore - Store API Tests
 
   @happypath
   Scenario: Obtener una orden por ID exitosamente
+    * def id = 5
+    * def petId = 1
+    * def quantity = 1
+    * def shipDate = '2026-02-23T00:00:00.000+0000'
+    * def status = 'placed'
+    * def complete = true
     Given path '/store/order'
-    And request
-      """
-      {
-        "id": 5,
-        "petId": 1,
-        "quantity": 1,
-        "shipDate": "2026-02-23T00:00:00.000+0000",
-        "status": "placed",
-        "complete": true
-      }
-      """
+    And request read('data/order.json')
     When method post
     Then status 200
 
@@ -59,18 +51,14 @@ Feature: Petstore - Store API Tests
 
   @happypath
   Scenario: Eliminar una orden exitosamente
+    * def id = 8
+    * def petId = 2
+    * def quantity = 1
+    * def shipDate = '2026-02-23T00:00:00.000+0000'
+    * def status = 'placed'
+    * def complete = false
     Given path '/store/order'
-    And request
-      """
-      {
-        "id": 8,
-        "petId": 2,
-        "quantity": 1,
-        "shipDate": "2026-02-23T00:00:00.000+0000",
-        "status": "placed",
-        "complete": false
-      }
-      """
+    And request read('data/order.json')
     When method post
     Then status 200
 
@@ -100,18 +88,14 @@ Feature: Petstore - Store API Tests
 
   @happypath
   Scenario: Crear una orden y verificar sus datos con GET
+    * def id = 15
+    * def petId = 3
+    * def quantity = 5
+    * def shipDate = '2026-03-01T00:00:00.000+0000'
+    * def status = 'approved'
+    * def complete = false
     Given path '/store/order'
-    And request
-      """
-      {
-        "id": 15,
-        "petId": 3,
-        "quantity": 5,
-        "shipDate": "2026-03-01T00:00:00.000+0000",
-        "status": "approved",
-        "complete": false
-      }
-      """
+    And request read('data/order.json')
     When method post
     Then status 200
 
