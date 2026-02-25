@@ -1,12 +1,11 @@
+@users
 Feature: Petstore - User API Tests
   Como QA quiero verificar que los endpoints de User funcionen correctamente
 
   Background:
     * url baseUrl
 
-  # ============================================
-  # POST /user - Crear un usuario
-  # ============================================
+  @happypath
   Scenario: Crear un usuario exitosamente
     Given path '/user'
     And request
@@ -26,9 +25,7 @@ Feature: Petstore - User API Tests
     Then status 200
     And match response.message != null
 
-  # ============================================
-  # POST /user/createWithList - Crear usuarios con lista
-  # ============================================
+  @happypath
   Scenario: Crear multiples usuarios con una lista
     Given path '/user/createWithList'
     And request
@@ -59,11 +56,39 @@ Feature: Petstore - User API Tests
     When method post
     Then status 200
 
-  # ============================================
-  # GET /user/{username} - Obtener usuario por username
-  # ============================================
+  @happypath
+  Scenario: Crear multiples usuarios con un array
+    Given path '/user/createWithArray'
+    And request
+      """
+      [
+        {
+          "id": 110,
+          "username": "arrayuser1",
+          "firstName": "Carlos",
+          "lastName": "Gomez",
+          "email": "carlos@test.com",
+          "password": "pass789",
+          "phone": "888888888",
+          "userStatus": 1
+        },
+        {
+          "id": 111,
+          "username": "arrayuser2",
+          "firstName": "Ana",
+          "lastName": "Torres",
+          "email": "ana@test.com",
+          "password": "pass321",
+          "phone": "999999999",
+          "userStatus": 1
+        }
+      ]
+      """
+    When method post
+    Then status 200
+
+  @happypath
   Scenario: Obtener un usuario por username
-    # Primero creamos el usuario
     Given path '/user'
     And request
       """
@@ -81,7 +106,6 @@ Feature: Petstore - User API Tests
     When method post
     Then status 200
 
-    # Ahora lo consultamos
     Given path '/user/testuser_get'
     When method get
     Then status 200
@@ -90,16 +114,14 @@ Feature: Petstore - User API Tests
     And match response.lastName == 'User'
     And match response.email == 'testget@test.com'
 
+  @unhappypath
   Scenario: Obtener un usuario que no existe
     Given path '/user/usuario_inexistente_xyz'
     When method get
     Then status 404
 
-  # ============================================
-  # PUT /user/{username} - Actualizar usuario
-  # ============================================
+  @happypath
   Scenario: Actualizar un usuario exitosamente
-    # Primero creamos el usuario
     Given path '/user'
     And request
       """
@@ -117,7 +139,6 @@ Feature: Petstore - User API Tests
     When method post
     Then status 200
 
-    # Ahora lo actualizamos
     Given path '/user/testuser_update'
     And request
       """
@@ -135,7 +156,6 @@ Feature: Petstore - User API Tests
     When method put
     Then status 200
 
-    # Verificamos que se actualizó
     Given path '/user/testuser_update'
     When method get
     Then status 200
@@ -143,11 +163,8 @@ Feature: Petstore - User API Tests
     And match response.lastName == 'Actualizado'
     And match response.email == 'despues@test.com'
 
-  # ============================================
-  # DELETE /user/{username} - Eliminar usuario
-  # ============================================
+  @happypath
   Scenario: Eliminar un usuario exitosamente
-    # Primero creamos el usuario
     Given path '/user'
     And request
       """
@@ -165,16 +182,18 @@ Feature: Petstore - User API Tests
     When method post
     Then status 200
 
-    # Ahora lo eliminamos
     Given path '/user/testuser_delete'
     When method delete
     Then status 200
 
-  # ============================================
-  # GET /user/login - Login de usuario
-  # ============================================
+  @unhappypath
+  Scenario: Eliminar un usuario que no existe
+    Given path '/user/usuario_fantasma_999'
+    When method delete
+    Then status 404
+
+  @happypath
   Scenario: Login de usuario exitoso
-    # Primero creamos el usuario
     Given path '/user'
     And request
       """
@@ -192,7 +211,6 @@ Feature: Petstore - User API Tests
     When method post
     Then status 200
 
-    # Ahora hacemos login
     Given path '/user/login'
     And param username = 'loginuser'
     And param password = 'loginpass'
@@ -200,10 +218,42 @@ Feature: Petstore - User API Tests
     Then status 200
     And match response.message contains 'logged in user session'
 
-  # ============================================
-  # GET /user/logout - Logout de usuario
-  # ============================================
+  @unhappypath
+  Scenario: Login sin enviar credenciales
+    Given path '/user/login'
+    When method get
+    Then status 200
+    And match response.message contains 'logged in user session'
+
+  @happypath
   Scenario: Logout de usuario exitoso
     Given path '/user/logout'
     When method get
     Then status 200
+
+  @happypath
+  Scenario: Verificar que un usuario eliminado ya no existe
+    Given path '/user'
+    And request
+      """
+      {
+        "id": 120,
+        "username": "user_eliminar_verificar",
+        "firstName": "Temporal",
+        "lastName": "User",
+        "email": "temporal@test.com",
+        "password": "temppass",
+        "phone": "101010101",
+        "userStatus": 1
+      }
+      """
+    When method post
+    Then status 200
+
+    Given path '/user/user_eliminar_verificar'
+    When method delete
+    Then status 200
+
+    Given path '/user/user_eliminar_verificar'
+    When method get
+    Then status 404
